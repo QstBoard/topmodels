@@ -1,0 +1,9 @@
+"""
+This file contains configuration settings specific to the development environment
+of {{ project_name }}
+All settings defined here are intended for development purposes and are intended
+to be used in addition to the base configuration, which is imported in this file.
+"""
+
+from . import base
+version = "{{ project_version }}"

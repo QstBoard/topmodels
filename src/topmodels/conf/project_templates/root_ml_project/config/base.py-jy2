@@ -1,0 +1,11 @@
+"""
+This file contains the base configuration for {{ project_name }}.
+It is intended to be inherited by other configuration files.
+Common settings for all environments (such as development, acceptance, and production)
+should be defined here to ensure consistency across the project.
+"""
+from pathlib import Path
+from typing import Dict, Any
+
+BASE_DIR: Path = Path(__file__).resolve().parent.parent
+APP_DIR: Path = BASE_DIR / "app"

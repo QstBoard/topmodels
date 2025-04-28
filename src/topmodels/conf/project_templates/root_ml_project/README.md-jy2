@@ -1,0 +1,38 @@
+# {{ project_name }}
+
+## Introduction
+
+Welcome to the `{{ project_name }}` project. 
+This repository provides a robust and scalable foundation for data science and machine learning workflows. 
+It is designed to help teams structure their code, configuration, and data assets efficiently, 
+ensuring reproducibility and collaboration across different environments.
+
+## Context
+
+This template is intended for use in data science projects that require clear separation 
+between development, acceptance, and production environments. 
+It includes best practices for configuration management, modular code organization, and version control. 
+The structure is suitable for projects involving data preprocessing, model training, evaluation, and deployment.
+
+## Project Structure
+
+- `config/`  
+  Contains configuration files for different environments:
+  - `base.py`: Base configuration shared by all environments.
+  - `dev.py`: Development-specific configuration.
+- `notebook/`  
+  Directory for Jupyter notebooks and exploratory analyses.
+
+## Releases
+
+### Version {{ project_version }}
+
+- Initial project structure and configuration.
+- Base configuration file for shared settings.
+- Environment-specific configuration files (development, acceptance, production).
+- Ready-to-use directory layout for data, notebooks, and source code.
+- Example scripts and documentation to help you get started quickly.
+
+---
+
+For more information, please refer to the documentation or contact the project maintainers.
