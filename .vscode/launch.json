@@ -19,5 +19,18 @@
             ],
             "console": "integratedTerminal"
         },
+        {
+            "name": "UnitTestSuite",
+            "type": "debugpy",
+            "request": "launch",
+            "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+            "module": "pytest",
+            "args": [
+                "tests/unit_tests",
+                "-v"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
     ]
 }
