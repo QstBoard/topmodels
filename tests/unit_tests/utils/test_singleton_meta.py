@@ -7,8 +7,21 @@ This module tests the thread-safety and uniqueness of the SingletonMeta implemen
 import threading
 from threading import Thread
 
+import pytest
+
 from topmodels.utils.meta import SingletonMeta
 
+
+@pytest.fixture(autouse=True)
+def reset_singleton_instances() -> None:
+    """
+    Pytest fixture that automatically resets the SingletonMeta instance cache before each test.
+
+    This fixture clears the `_instances` dictionary of the `SingletonMeta` metaclass,
+    ensuring that singleton instances do not persist between tests and each test runs
+    with a fresh singleton state.
+    """
+    SingletonMeta._instances.clear()
 
 class MySingleton(metaclass=SingletonMeta):
     """
