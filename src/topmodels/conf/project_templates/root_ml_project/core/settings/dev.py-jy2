@@ -1,0 +1,55 @@
+"""
+This file contains configuration settings specific to the development environment
+of {{ project_name }}
+All settings defined here are intended for development purposes and are intended
+to be used in addition to the base configuration, which is imported in this file.
+"""
+import os
+from typing import Any, Literal
+
+from dotenv import load_dotenv
+
+from .base import *
+
+load_dotenv(dotenv_path=BASE_DIR / 'core' / 'settings' / '.env')
+
+ENVIRONMENT = 'dev'
+PROJECT_VERSION = "{{ project_version }}"
+
+DATA_ENGINE: Literal['local_spark', 'databricks_spark'] = 'local_spark'
+
+######################################################################
+# Database examples configuration. Up to your project configuration. #
+######################################################################
+FETCH_SIZE: str = '1000'
+
+DATABASE: dict[str, dict[str, Any]] = {
+    'chinook': {
+        'backend': 'sqlite',
+        'url': BASE_DIR / 'sampledb' / 'chinook.db',
+    },
+    'ORACLE': {
+        # 'backend': 'oracle',
+        # 'username': os.getenv('ORACLE_USERNAME'),
+        # 'password': os.getenv('ORACLE_PASSWORD'),
+        # 'host': os.getenv('ORACLE_HOST'),
+        # 'service': os.getenv('ORACLE_SERVICE'),
+        # 'url': os.getenv('ORACLE_JDBC_CONNECTION_STRING'),
+        # 'fetchsize': FETCH_SIZE,
+    },
+    'MSSQL': {
+        # 'backend': 'mssql',
+        # 'username': os.getenv('MSSQL_USERNAME'),
+        # 'password': os.getenv('MSSQL_PASSWORD'),
+        # 'host': os.getenv('MSSQL_HOST'),
+        # 'database': os.getenv('MSSQL_DATABASE'),
+        # 'url': os.getenv('MSURL'),
+        # 'fetchsize': FETCH_SIZE,
+    },
+    'databricks_dev': {
+        # 'backend': 'databricks',
+        # 'connection': {'profile': 'dev',},
+        # 'catalog': 'catalog_name',
+    },
+
+}

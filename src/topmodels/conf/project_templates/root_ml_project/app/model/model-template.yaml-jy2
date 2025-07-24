@@ -1,0 +1,21 @@
+name: OpportuniteConfirmee
+
+source: 
+  type: sql
+  datasource_id: chinook
+  query: |
+    SELECT
+        c.CustomerId,
+        c.FirstName || ' ' || c.LastName AS FullName,
+        c.Country,
+        COUNT(ii.InvoiceLineId) AS TotalTracksPurchased,
+        ROUND(SUM(ii.UnitPrice * ii.Quantity), 2) AS TotalSpent
+    FROM customers c
+    JOIN invoices i ON c.CustomerId = i.CustomerId
+    JOIN invoice_items ii ON i.InvoiceId = ii.InvoiceId
+    GROUP BY c.CustomerId, c.FirstName, c.LastName, c.Country
+
+sink: 
+  type: parquet 
+  datasource_id: local
+  table: customers_purchase

@@ -1,0 +1,7 @@
+from topmodels.controller.base import ETLController
+
+class HelloWorldController(ETLController):
+    """
+    Basic ETL controller structure using the model `model-template` 
+    """
+    model_name = 'model-template'

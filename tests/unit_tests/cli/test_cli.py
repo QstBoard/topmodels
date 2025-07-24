@@ -1,85 +1,44 @@
 """
 Unit tests for the topmodels CLI main entry point.
-
-This module tests various behaviors of the CLI, including argument parsing,
-error handling, and dynamic action module loading.
 """
+from pathlib import Path
+from unittest import mock
 
 import pytest
-import sys
-from unittest import mock
-from topmodels.cli import main
+from pytest import MonkeyPatch
+from typer.testing import CliRunner
+
+from topmodels.__main__ import app
+
+runner = CliRunner()
 
 class TestMainCLI:
-    """
-    Test suite for the main CLI function in topmodels.
+    """Test suite for the main CLI entry point."""
 
-    Covers argument validation, error propagation, and correct module invocation.
-    """
+    def test_cli_create_default(self, tmp_path: Path) -> None:
+        """Test that the CLI creates a project"""
+        result = runner.invoke(
+            app, [
+                'scaffold', 'create',
+                '--name', 'test_project', 
+                '--version', '0.1.0', 
+                '--output', str(tmp_path),
+            ],
+        )
+        assert result.exit_code == 0
+        project_dir = tmp_path / 'test_project'
+        assert project_dir.exists()
 
-    def test_main__raises_value_error_when_no_action(self, monkeypatch):
-        """
-        Test that ValueError is raised when no action is provided in sys.argv.
-        """
-        monkeypatch.setattr(sys, "argv", '')
-        with pytest.raises(ValueError, match="Invalid action 'None'.*"):
-            main()
-
-    def test_main__raises_value_error_when_invalid_action(self, monkeypatch):
-        """
-        Test that ValueError is raised when an invalid action is provided.
-        """
-        monkeypatch.setattr(sys, "argv", ["topmodels", "invalid_action"])
-        with pytest.raises(ValueError, match="Invalid action 'invalid_action'.*"):
-            main()
-
-    def test__main_raises_import_error_when_module_not_found(self, monkeypatch):
-        """
-        Test that ImportError is raised when the action module cannot be imported.
-        """
-        monkeypatch.setattr(sys, "argv", ["topmodels", "scaffold"])
-        with mock.patch("importlib.import_module", side_effect=ImportError("No module")):
-            with pytest.raises(ImportError, match="Failed to import action module.*"):
-                main()
-
-    def test__main_calls_run_with_args(self, monkeypatch):
-        """
-        Test that the action module's run() is called with the correct arguments.
-        """
-        monkeypatch.setattr(sys, "argv", ["topmodels", "scaffold", "foo", "bar"])
-        mock_module = mock.Mock()
-        with mock.patch("importlib.import_module", return_value=mock_module) as import_mod:
-            main()
-            import_mod.assert_called_once_with("topmodels.cli.actions.scaffold")
-            mock_module.run.assert_called_once_with(["foo", "bar"])
-
-    def test__main_passes_empty_args_to_run(self, monkeypatch):
-        """
-        Test that run() is called with an empty list when no extra arguments are provided.
-        """
-        monkeypatch.setattr(sys, "argv", ["topmodels", "scaffold"])
-        mock_module = mock.Mock()
-        with mock.patch("importlib.import_module", return_value=mock_module):
-            main()
-            mock_module.run.assert_called_once_with([])
-
-    def test__main_import_module_called_with_correct_name(self, monkeypatch):
-        """
-        Test that import_module is called with the correct action module name.
-        """
-        monkeypatch.setattr(sys, "argv", ["topmodels", "scaffold"])
-        mock_module = mock.Mock()
-        with mock.patch("importlib.import_module", return_value=mock_module) as import_mod:
-            main()
-            import_mod.assert_called_once_with("topmodels.cli.actions.scaffold")
-
-    def test__main_run_raises_exception_propagates(self, monkeypatch):
-        """
-        Test that exceptions raised by run() are propagated.
-        """
-        monkeypatch.setattr(sys, "argv", ["topmodels", "scaffold"])
-        mock_module = mock.Mock()
-        mock_module.run.side_effect = RuntimeError("run failed")
-        with mock.patch("importlib.import_module", return_value=mock_module):
-            with pytest.raises(RuntimeError, match="run failed"):
-                main()
+    def test_cli_create_no_default(self, tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
+        """Test that the CLI creates a project with default output as the cwd."""
+        monkeypatch.chdir(tmp_path)
+        result = runner.invoke(
+            app, [
+                'scaffold', 'create',
+                '--name', 'test_project', 
+                '--version', '0.1.0', 
+            ]
+        )
+        assert result.exit_code == 0
+        project_dir = tmp_path / 'test_project'
+        assert project_dir.exists()

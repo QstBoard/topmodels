@@ -1,0 +1,13 @@
+from importlib import import_module
+
+from topmodels.conf import settings
+from topmodels.core.resolver import ActionResolver
+
+
+def app(request):
+    APP_NAME: str = '{{ project_name }}'
+    request.app_name = APP_NAME
+    controller_module = import_module(f'{APP_NAME}.{settings.CONTROLLER_MODULE}')
+    resolver = ActionResolver(request=request)
+    resolver.resolve()
+    
