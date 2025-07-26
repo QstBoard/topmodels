@@ -20,9 +20,8 @@ from collections import ChainMap
 from types import ModuleType
 from typing import Any
 
+import topmodels.conf.default_settings as default_settings_module
 from topmodels.core import SETTINGS_MODULE_VARIABLE
-
-from . import default_settings as default_settings_module
 
 _NOT_SET = object()
 
@@ -203,7 +202,7 @@ class Settings:
         try:
             del self._settings[name]
         except KeyError as e:
-            raise AttributeError(f"No user setting with name '{name}'") from e
+            raise AttributeError(f"No local setting with name '{name}'") from e
         self.__dict__.pop(name, None)
 
     def isoverridden(self, setting: str) -> bool:

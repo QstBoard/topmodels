@@ -1,13 +1,22 @@
 """
 Main entry point for {{ project_name }}.
 """
+import typer
+
 from topmodels.core import app
+
+main_app = typer.Typer()
+main_app.add_typer(
+    app,
+    name="manager",
+    help="Manage core functionalities of the topmodels framework"
+)
 
 def main() -> None:
     """
     Main function that initializes and launch process.
     """
-    app()
+    main_app()
 
 if __name__ == '__main__':
     main()
